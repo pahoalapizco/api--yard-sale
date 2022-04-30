@@ -1,29 +1,20 @@
 const { Router } = require('express');
+const UsersService = require('../services/user.service');
 
 const router = Router();
+const service = new UsersService();
 
 // Users:
-router.get('/', (req, res) => {
-  res.json([
-    {
-      id: 1,
-      name: 'Paola Alapizco',
-      username: 'pahoalapizco',
-    },
-    {
-      id: 2,
-      name: 'David Lopez',
-      username: 'davidcorp',
-    },
-  ]);
+router.get('/', async (req, res) => {
+  const users = await service.find();
+  res.json(users);
 });
 
-router.get('/:userId', (req, res) => {
+router.get('/:userId', async (req, res) => {
   const { userId } = req.params;
+  const user = service.findOne(userId);
   res.json({
-    userId,
-    name: 'Paola Alapizco',
-    username: 'pahoalapizco',
+    ...user,
   });
 });
 
@@ -51,29 +42,31 @@ router.get('/:userId/orders/:orderId', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const body = req.body;
+  const newUser = await service.create(body);
   res.status(201).json({
     message: "User created",
-    body,
+    data: newUser,
   });
 });
 
-router.patch('/:userId', (req, res) => {
+router.patch('/:userId', async (req, res) => {
   const { userId } = req.params;
+  const userUpdate = await service.update(userId, body);
   const body = req.body;
   res.json({
     message: "User updated",
-    data: body,
-    userId
+    ...userUpdate,
   });
 });
 
-router.delete('/:userId', (req, res) => {
+router.delete('/:userId', async (req, res) => {
   const { userId } = req.params;
+  const userDelete = await service.delete(userId);
   res.json({
     message: "User deleted",
-    userId
+    ...userDelete,
   });
 });
 
