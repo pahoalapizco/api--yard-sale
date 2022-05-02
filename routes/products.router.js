@@ -4,26 +4,27 @@ const router = Router();
 const service = new ProductsService();
 
 // Products:
-router.get('/', async (req, res) => {
-  const productos = await service.find();
-  res.json(productos);
+router.get('/', async (req, res, next) => {
+  try {
+    const productos = await service.find();
+    res.json(productos);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
 
   try {
     const product = await service.findOne(id);
     res.json(product);
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: err.message,
-    });
+  } catch (error) {
+    next(error)
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const body = req.body;
 
   try {
@@ -32,17 +33,14 @@ router.post('/', async (req, res) => {
       message: 'Product created',
       data: newProduct,
     });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: err.message,
-    });
+  } catch (error) {
+    next(error)
   }
 });
 
 // Patch: actualizado parcial
 // Put: actualizado completo
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', async (req, res, next) => {
   const { id } = req.params;
   const body = req.body;
 
@@ -52,15 +50,12 @@ router.patch('/:id', async (req, res) => {
       message: 'Product updated',
       data: productUpdated,
     });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: err.message,
-    });
+  } catch (error) {
+    next(error)
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const productDeleted = await service.delete(id);
@@ -69,11 +64,8 @@ router.delete('/:id', async (req, res) => {
       message: 'Product deleted',
       ...productDeleted,
     });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: err.message,
-    });
+  } catch (error) {
+    next(error)
   }
 });
 
