@@ -15,7 +15,7 @@ const updateCategorySchema = joi.object({
 });
 
 const getCategorySchema = joi.object({
-  categoryId: CategoryId.require(),
+  categoryId: CategoryId.required(),
 });
 
 module.exports = {

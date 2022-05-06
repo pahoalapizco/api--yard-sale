@@ -26,11 +26,11 @@ const updateUserSchema = joi.object({
 });
 
 const getUserchema = joi.object({
-  userId: userId.require(),
+  userId: userId.required(),
 });
 
 const getUserOrderchema = joi.object({
-  userId: userId.require(),
+  userId: userId.required(),
   orderId: orderIduser.required(),
 });
 
