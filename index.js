@@ -1,6 +1,8 @@
 const express = require('express');
 const routerApi = require('./routes');
 
+const { config } = require('./config/config');
+
 // Middlewares
 const {
   logError,
@@ -9,7 +11,7 @@ const {
 } = require('./middlewares/error.handler');
 
 const app = express();
-const PORT = 3000;
+const PORT = config.port;
 
 app.use(express.json());
 
