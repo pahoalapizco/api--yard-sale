@@ -1,8 +1,12 @@
 const faker = require('faker');
 const boom = require('@hapi/boom');
+
+const { models } = require('../libs/sequelize');
+
 class CategoriesService {
   constructor(){
     this.categories = [];
+    this.model = models.Category;
   }
 
   async create(data) {
@@ -16,18 +20,14 @@ class CategoriesService {
   }
 
   async find() {
-    if(this.categories.length === 0){
-      throw boom.notFound('Categories not found');
-    }
-    return this.categories;
+    const categories = await this.model.findAll();
+
+    return categories;
   }
 
   async findOne(id) {
-    const category = this.categories.find(cat => cat.id === id);
-    if(!category){
-      throw boom.notFound('Category not found');
-    }
-    return category;
+    const category = await this.model.findByPk(id);
+    return category.dataValues;
   }
 
   async update(id, data) {

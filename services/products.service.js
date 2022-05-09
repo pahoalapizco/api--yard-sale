@@ -1,15 +1,15 @@
-const { QueryTypes } = require('sequelize');
 const faker = require('faker');
 const boom = require('@hapi/boom');
 
 // DB
-const sequelize =require('../libs/sequelize');
+const { models } = require('../libs/sequelize');
 
 
 class ProductsService {
   constructor() {
     this.products = [];
     this.generate();
+    this.model = models.Product;
   }
 
   generate() {
@@ -36,20 +36,14 @@ class ProductsService {
   }
 
   async find() {
-    const query = 'SELECT * FROM Tasks'
-    const data = await sequelize.query(query, {
-      type: QueryTypes.SELECT,
-    });
+    const data = await this.model.findAll();
 
     return data;
   }
 
   async findOne(id) {
-    const product = this.products.find((prod) => prod.id === id);
-    if(!product) {
-      throw boom.notFound('Product not found');
-    }
-    return product;
+    const product = await this.model.findByPk(id);
+    return product.dataValues;
   }
 
   async update(id, data) {

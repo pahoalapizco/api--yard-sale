@@ -1,9 +1,12 @@
 const faker = require('faker');
 const boom = require('@hapi/boom');
 
+const { models } = require('../libs/sequelize');
+
 class UsersService {
   constructor() {
     this.users = [];
+    this.model = models.User;
   }
 
   async create(data) {
@@ -16,18 +19,16 @@ class UsersService {
   }
 
   async find() {
-    if(this.users.length === 0) {
-      throw boom.notFound('Users not found');
-    }
-    return this.users;
+    const resp = await this.model.findAll();
+    return resp;
   }
 
   async findOne(id) {
-    const user = this.users.find(user => user.id === id);
+    const user = await this.model.findByPk(id);
     if(!user) {
       throw boom.notFound('User not found');
     }
-    return user;
+    return user.dataValues;
   }
 
   async update(id, data) {

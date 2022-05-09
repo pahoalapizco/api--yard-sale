@@ -1,6 +1,6 @@
 const joi = require('joi');
 
-const productId = joi.string().uuid();
+const productId = joi.number().integer();
 const name = joi.string().min(3);
 const price = joi.number().integer().min(10);
 const image = joi.string().uri();

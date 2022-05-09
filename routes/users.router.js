@@ -25,7 +25,7 @@ router.get('/:userId',
   async (req, res, next) => {
     try {
       const { userId } = req.params;
-      const user = service.findOne(userId);
+      const user = await service.findOne(userId);
       res.json({
         ...user,
       });
