@@ -13,8 +13,11 @@ class UsersService {
   }
 
   async find() {
-    const resp = await this.model.findAll();
-    return resp;
+    const users = await this.model.findAll();
+    if(!users) {
+      throw boom.notFound('Users not found');
+    }
+    return users;
   }
 
   async findOne(id) {

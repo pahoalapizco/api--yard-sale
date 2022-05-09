@@ -17,7 +17,7 @@ class CategoriesService {
   async find() {
     const categories = await this.model.findAll();
     if(!categories){
-      throw boom.notFound('Category not found');
+      throw boom.notFound('Categories not found');
     }
     return categories;
   }

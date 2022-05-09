@@ -22,7 +22,9 @@ router.get('/:id',
 
     try {
       const product = await service.findOne(id);
-      res.json(product);
+      res.json({
+        ...product.dataValues
+      });
     } catch (error) {
       next(error)
     }
