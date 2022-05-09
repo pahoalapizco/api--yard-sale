@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migration:generate": "sequelize-cli migration:generate --name",
+    "migration:run": "sequelize-cli db:migrate",
+    "migration:revert": "sequelize-cli db:migrate:undo",
+    "migration:delete": "sequelize-cli db:migrate:undo:all"
   },
   "keywords": [
     "store",
@@ -21,7 +25,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "faker": "^5.5.3",
     "nodemon": "^2.0.15",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "sequelize-cli": "^6.4.1"
   },
   "dependencies": {
     "@hapi/boom": "9.1.4",
