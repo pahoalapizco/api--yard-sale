@@ -21,15 +21,17 @@ class ProductsService {
   }
 
   async find() {
-    const data = await this.model.findAll();
-
-    return data;
+    const products = await this.model.findAll();
+    if(!products){
+      throw boom.notFound('Products not found');
+    }
+    return products;
   }
 
   async findOne(id) {
     const product = await this.model.findByPk(id);
     if(!product){
-      throw boom.notFound('Category not found');
+      throw boom.notFound('Product not found');
     }
     return product;
   }
