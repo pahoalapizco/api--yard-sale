@@ -26,7 +26,7 @@ router.get('/:categoryId/',
       const { categoryId } = req.params;
       const category = await service.findOne(categoryId);
       res.json({
-        ...category,
+        ...category.dataValues,
       });
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ router.patch('/:categoryId',
       const body = req.body;
       const categoryUpdate = await service.update(categoryId, body);
       res.json({
-        ...categoryUpdate,
+        ...categoryUpdate.dataValues,
       });
     } catch (error) {
       next(error);

@@ -1,4 +1,3 @@
-const faker = require('faker');
 const boom = require('@hapi/boom');
 
 const { models } = require('../libs/sequelize');
@@ -10,42 +9,39 @@ class CategoriesService {
   }
 
   async create(data) {
-    const newCategory = {
-      id: faker.datatype.uuid(),
-      ...data
-    }
-    this.categories.push(newCategory);
+    const newCategory = await this.model.create(data);
 
-    return newCategory;
+    return newCategory.dataValues;
   }
 
   async find() {
     const categories = await this.model.findAll();
-
+    if(!categories){
+      throw boom.notFound('Category not found');
+    }
     return categories;
   }
 
   async findOne(id) {
     const category = await this.model.findByPk(id);
-    return category.dataValues;
+    if(!category){
+      throw boom.notFound('Category not found');
+    }
+    return category;
   }
 
   async update(id, data) {
-    const index = this.categories.findIndex(user => user.id === id);
-    if(index === -1){
-      throw boom.notFound('Category not found');
-    }
-    this.categories[index] = data;
-    return this.categories[index]
+    const category = await this.findOne(id);
+    const categoryUpdated = category.update(data);
+
+    return categoryUpdated;
   }
 
   async delete(id) {
-    const index = this.categories.findIndex(user => user.id === id);
-    if(index === -1){
-      throw boom.notFound('Category not found');
-    }
-    this.categories = this.categories.spl(index, 1);
-    return id;
+    const category = await this.findOne(id);
+    const categoryDeleted = await category.destroy(id);
+
+    return categoryDeleted;
   }
 }
 
