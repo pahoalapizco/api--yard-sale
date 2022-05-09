@@ -14,7 +14,7 @@ const crearteUserSchema = joi.object({
   email: email.required(),
   password: password.required(),
   role: role.required(),
-  avatar: avatar.required(),
+  avatar,
 });
 
 const updateUserSchema = joi.object({

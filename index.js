@@ -8,6 +8,7 @@ const {
   logError,
   errorHandler,
   boomErrorHandler,
+  dbErrorHandler,
 } = require('./middlewares/error.handler');
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 routerApi(app);
 
 app.use(logError);
+app.use(dbErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 

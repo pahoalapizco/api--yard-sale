@@ -5,6 +5,7 @@ const PRODUCT_TABLE = 'products';
 const productSchema = {
   id: {
     allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
   },

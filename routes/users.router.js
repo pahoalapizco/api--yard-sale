@@ -27,7 +27,7 @@ router.get('/:userId',
       const { userId } = req.params;
       const user = await service.findOne(userId);
       res.json({
-        ...user,
+        ...user.dataValues,
       });
     } catch (error) {
       next(error);
@@ -92,8 +92,8 @@ router.patch('/:userId',
   async (req, res, next) => {
     try {
       const { userId } = req.params;
-      const userUpdate = await service.update(userId, body);
       const body = req.body;
+      const userUpdate = await service.update(userId, body);
       res.json({
         message: 'User updated',
         ...userUpdate,
