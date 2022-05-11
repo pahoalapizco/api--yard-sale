@@ -1,5 +1,5 @@
 'use strict';
-const { productSchema, PRODUCT_TABLE } = require('./../models/products.model');
+const { productSchema, PRODUCT_TABLE } = require('./../models/products.models');
 
 module.exports = {
   async up (queryInterface) {
