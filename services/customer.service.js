@@ -8,12 +8,16 @@ class CustomerService {
   }
 
   async create(data) {
-    const newUser =  await this.model.create(data);
+    const newUser =  await this.model.create(data, {
+      include: ['user']
+    });
     return newUser;
   }
 
   async find() {
-    const users = await this.model.findAll();
+    const users = await this.model.findAll({
+      include: ['user']
+    });
     if(!users) {
       throw boom.notFound('Customers not found');
     }

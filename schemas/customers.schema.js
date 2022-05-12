@@ -1,16 +1,22 @@
 const joi = require('joi');
+const { crearteUserFromCustomerSchema } = require('./users.schema');
 
 const customerId = joi.number().integer().min(0);
 const name = joi.string().min(5);
 const lastName = joi.string().min(3);
 const phone = joi.string().min(8).pattern(new RegExp('([0-9][ -]*){8}'));
-const userId = joi.number().integer().min(1);
 
 const crearteCustomerSchema = joi.object({
   name: name.required(),
   lastName: lastName.required(),
   phone: phone.required(),
-  userId: userId.required(),
+  user: crearteUserFromCustomerSchema,
+});
+
+const crearteCustomerFromUsersSchema = joi.object({
+  name: name.required(),
+  lastName: lastName.required(),
+  phone: phone.required(),
 });
 
 const updateCustomerSchema = joi.object({
@@ -29,4 +35,5 @@ module.exports = {
   crearteCustomerSchema,
   updateCustomerSchema,
   getCustomerchema,
+  crearteCustomerFromUsersSchema,
 }

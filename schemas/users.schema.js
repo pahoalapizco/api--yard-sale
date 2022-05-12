@@ -13,8 +13,14 @@ const crearteUserSchema = joi.object({
   name: name.required(),
   email: email.required(),
   password: password.required(),
-  role: role.required(),
+  role,
   avatar,
+});
+
+const crearteUserFromCustomerSchema = joi.object({
+  name: name.required(),
+  email: email.required(),
+  password: password.required(),
 });
 
 const updateUserSchema = joi.object({
@@ -40,4 +46,5 @@ module.exports = {
   updateUserSchema,
   getUserchema,
   getUserOrderchema,
+  crearteUserFromCustomerSchema,
 }

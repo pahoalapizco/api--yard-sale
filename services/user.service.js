@@ -13,7 +13,9 @@ class UsersService {
   }
 
   async find() {
-    const users = await this.model.findAll();
+    const users = await this.model.findAll({
+      include: ['customer']
+    });
     if(!users) {
       throw boom.notFound('Users not found');
     }
