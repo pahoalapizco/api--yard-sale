@@ -6,6 +6,7 @@ class CategoriesService {
   constructor(){
     this.categories = [];
     this.model = models.Category;
+    this.productModel = models.Product;
   }
 
   async create(data) {
@@ -23,7 +24,13 @@ class CategoriesService {
   }
 
   async findOne(id) {
-    const category = await this.model.findByPk(id);
+    const category = await this.model.findByPk(id, {
+      include: [{
+        attributes: ['id', 'name', 'description', 'price', 'image'],
+        model: this.productModel,
+        as: 'products'
+      }]
+    });
     if(!category){
       throw boom.notFound('Category not found');
     }

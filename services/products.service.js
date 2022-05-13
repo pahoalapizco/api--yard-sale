@@ -1,4 +1,3 @@
-const faker = require('faker');
 const boom = require('@hapi/boom');
 
 // DB
@@ -7,12 +6,8 @@ const { models } = require('../libs/sequelize');
 
 class ProductsService {
   constructor() {
-    this.products = [];
-    this.generate();
     this.model = models.Product;
-  }
-
-  generate() {
+    this.categoryModel = models.Category
   }
 
   async create(data) {
@@ -21,7 +16,14 @@ class ProductsService {
   }
 
   async find() {
-    const products = await this.model.findAll();
+    const products = await this.model.findAll({
+      include: [{
+        attributes: ['id', "name", "image"],
+        model: this.categoryModel,
+        as: 'category'
+      }]
+    });
+
     if(!products){
       throw boom.notFound('Products not found');
     }
