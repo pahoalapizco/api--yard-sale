@@ -9,7 +9,7 @@
     "lint": "eslint",
     "migration:generate": "sequelize-cli migration:generate --name",
     "migration:run": "sequelize-cli db:migrate --debug",
-    "migration:revert": "sequelize-cli db:migrate:undo",
+    "migration:revert": "sequelize-cli db:migrate:undo --name",
     "migration:delete": "sequelize-cli db:migrate:undo:all"
   },
   "keywords": [
