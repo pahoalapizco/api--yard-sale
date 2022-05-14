@@ -21,20 +21,21 @@ const orderSchema = {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE'
   },
-  totalItems: {
-    field: 'total_items',
-    allowNull: false,
-    type: DataTypes.INTEGER,
-  },
-  total: {
-    allowNull: false,
-    type: DataTypes.DECIMAL,
-  },
   createAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'create_at',
     defaultValue: DataTypes.NOW
+  },
+  total: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      if (this.items.length > 0) {
+        return this.items.reduce((total, item) => {
+          return total + (item.price * item.OrderProduct.amount);
+        }, 0);
+      }
+    }
   },
 }
 
@@ -46,7 +47,7 @@ class Order extends Model {
     // Relacion muchos a muchos
     this.belongsToMany(models.Product, {
       as: 'items',
-      through: 'orders_products', // Tabla relacion,
+      through: models.OrderProduct, // Tabla relacion,
       foreignKey: 'orderId',
       otherKey: 'productId'
     })

@@ -5,11 +5,26 @@ const { models } = require('../libs/sequelize');
 class OrderService {
   constructor() {
     this.model = models.Order;
+    this.OrderProductModel = models.OrderProduct;
   }
 
   async create(data) {
+    const { items } = data;
     const newOrer =  await this.model.create(data);
+    if(items) {
+      await this.OrderProductModel.bulkCreate(items.map(item => ({
+            ...item,
+            orderId: newOrer.dataValues.id,
+          })
+        )
+      );
+    }
     return newOrer;
+  }
+
+  async addItem(data) {
+    const newItem = await this.OrderProductModel.create(data);
+    return newItem;
   }
 
   async find() {
@@ -24,14 +39,21 @@ class OrderService {
 
   async findOne(id) {
     const order = await this.model.findByPk(id, {
-      include: {
-        association: 'customer',
-        include: [{
-          attributes: ['name', 'email'],
-          model: models.User,
-          as: 'user'
-        }],
-      },
+      include: [
+        {
+          attributes: ['name', 'lastName', 'phone'],
+          association: 'customer',
+          include: [{
+            attributes: ['name', 'email'],
+            model: models.User,
+            as: 'user'
+          }],
+        },
+        {
+          attributes: ['name', 'price', 'image', 'categoryId'],
+          association: 'items'
+        }
+      ],
     });
     if(!order) {
       throw boom.notFound('Order not found');
