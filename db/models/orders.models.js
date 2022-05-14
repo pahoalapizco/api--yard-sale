@@ -21,6 +21,15 @@ const orderSchema = {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE'
   },
+  totalItems: {
+    field: 'total_items',
+    allowNull: false,
+    type: DataTypes.INTEGER,
+  },
+  total: {
+    allowNull: false,
+    type: DataTypes.DECIMAL,
+  },
   createAt: {
     allowNull: false,
     type: DataTypes.DATE,
@@ -34,6 +43,13 @@ class Order extends Model {
     this.belongsTo(models.Customer, {
       as: 'customer',
     });
+    // Relacion muchos a muchos
+    this.belongsToMany(models.Product, {
+      as: 'items',
+      through: 'orders_products', // Tabla relacion,
+      foreignKey: 'orderId',
+      otherKey: 'productId'
+    })
   }
 
   static config(sequelize) {
