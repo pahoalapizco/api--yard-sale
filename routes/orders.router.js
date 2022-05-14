@@ -22,16 +22,6 @@ router.get('/:id',
     }
   }
 );
-router.get('/',
-  async (req, res, next) => {
-    try {
-      const orders = await service.find();
-      res.json(orders);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
 router.post('/',
   validatorHandler(createOrderSchema, 'body'),

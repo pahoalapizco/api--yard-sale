@@ -1,21 +1,30 @@
 const { Router } = require('express');
 const ProductsService = require('../services/products.service');
 const validatorHandler = require('../middlewares/validator.handler');
-const { getProductSchema, createProductSchema, updateProductSchema, } = require('../schemas/product.schema');
+const {
+  getProductSchema,
+  createProductSchema,
+  updateProductSchema,
+  queryProductSchema,
+} = require('../schemas/product.schema');
 const router = Router();
 const service = new ProductsService();
 
 // Products:
-router.get('/', async (req, res, next) => {
-  try {
-    const productos = await service.find();
-    res.json(productos);
-  } catch (error) {
-    next(error);
+router.get('/',
+  validatorHandler(queryProductSchema, 'query'),
+  async (req, res, next) => {
+    try {
+      const productos = await service.find(req.query);
+      res.json(productos);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.get('/:id',
+router.get(
+  '/:id',
   validatorHandler(getProductSchema, 'params'),
   async (req, res, next) => {
     const { id } = req.params;
@@ -23,14 +32,16 @@ router.get('/:id',
     try {
       const product = await service.findOne(id);
       res.json({
-        ...product.dataValues
+        ...product.dataValues,
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
-});
+  }
+);
 
-router.post('/',
+router.post(
+  '/',
   validatorHandler(createProductSchema, 'body'),
   async (req, res, next) => {
     const body = req.body;
@@ -42,14 +53,15 @@ router.post('/',
         data: newProduct,
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 );
 
 // Patch: actualizado parcial
 // Put: actualizado completo
-router.patch('/:id',
+router.patch(
+  '/:id',
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),
   async (req, res, next) => {
@@ -63,12 +75,13 @@ router.patch('/:id',
         data: productUpdated,
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   validatorHandler(getProductSchema, 'params'),
   async (req, res, next) => {
     const { id } = req.params;
@@ -80,7 +93,7 @@ router.delete('/:id',
         ...productDeleted,
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 );
