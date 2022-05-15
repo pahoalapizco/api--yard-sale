@@ -5,12 +5,19 @@ const setupModels = require('../db/models');
 const USER = encodeURIComponent(config.dbUser);
 const PASS = encodeURIComponent(config.dbPass);
 
-const URI = `${config.dbDialect}://${USER}:${PASS}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
-
-const sequelize = new Sequelize(URI, {
+const URI = config.dbUrl || `${config.dbDialect}://${USER}:${PASS}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+const options = {
   dialect: config.dbDialect,
-  logging: console.log,
-});
+  logging: !config.idProd,
+}
+
+if(config.idProd) {
+  options.ssl = {
+    rejectUnauthorized: !config.idProd
+  };
+}
+
+const sequelize = new Sequelize(URI, options);
 
 setupModels(sequelize);
 

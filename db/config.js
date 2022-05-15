@@ -3,7 +3,7 @@ const { config } = require('../config/config');
 const USER = encodeURIComponent(config.dbUser);
 const PASS = encodeURIComponent(config.dbPass);
 
-const URI = `${config.dbDialect}://${USER}:${PASS}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+const URI = config.dbUrl || `${config.dbDialect}://${USER}:${PASS}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 
 
 module.exports = {
@@ -14,5 +14,8 @@ module.exports = {
   production: {
     url: URI,
     dialect: config.dbDialect,
+    ssl: {
+      rejectUnauthorized: !config.idProd
+    }
   },
 }
